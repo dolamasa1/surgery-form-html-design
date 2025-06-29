@@ -34,9 +34,11 @@ In **MD System**, this form is used for recording and managing patient surgeries
 
 ## 📸 Screenshots
 
-| Web Design Prototype | Final Swing Form in MD System 2.5.1 |
-|----------------------|-------------------------------------|
-| ![Web Preview](assets/form-html-preview.png) | ![Swing Preview](assets/form-swing-preview.png) |
+**Web Design Prototype:**  
+![Web Preview](assets/form-html-preview.png)  
+
+**Final Swing Form in MD System 2.5.1:**  
+![Swing Preview](assets/form-swing-preview.png)  
 
 ---
 
