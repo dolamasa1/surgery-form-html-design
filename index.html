@@ -1,0 +1,223 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Diagnosis Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">MedDx Pro</div>
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search diagnoses, symptoms, or ICD codes..." id="searchInput">
+                <div class="search-icon">🔍</div>
+            </div>
+            <div class="user-info">
+                <div class="notification-badge">
+                    🔔
+                    <div class="notification-dot"></div>
+                </div>
+                <div class="notification-badge">👤</div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <div class="section-title">Medical Categories</div>
+                <ul class="taxonomy-tree">
+                    <li class="taxonomy-item">
+                        <a href="#" class="taxonomy-link active" data-category="cardiovascular">
+                            <div class="taxonomy-icon">❤️</div>
+                            Cardiovascular
+                            <div class="case-count">247</div>
+                        </a>
+                    </li>
+                    <li class="taxonomy-item">
+                        <a href="#" class="taxonomy-link" data-category="respiratory">
+                            <div class="taxonomy-icon">🫁</div>
+                            Respiratory
+                            <div class="case-count">189</div>
+                        </a>
+                    </li>
+                    <li class="taxonomy-item">
+                        <a href="#" class="taxonomy-link" data-category="neurological">
+                            <div class="taxonomy-icon">🧠</div>
+                            Neurological
+                            <div class="case-count">156</div>
+                        </a>
+                    </li>
+                    <li class="taxonomy-item">
+                        <a href="#" class="taxonomy-link" data-category="endocrine">
+                            <div class="taxonomy-icon">⚡</div>
+                            Endocrine
+                            <div class="case-count">98</div>
+                        </a>
+                    </li>
+                    <li class="taxonomy-item">
+                        <a href="#" class="taxonomy-link" data-category="infectious">
+                            <div class="taxonomy-icon">🦠</div>
+                            Infectious Disease
+                            <div class="case-count">134</div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="section-title">Quick Actions</div>
+                <ul class="taxonomy-tree">
+                    <li class="taxonomy-item">
+                        <a href="#" class="taxonomy-link" id="recentCases">
+                            <div class="taxonomy-icon">📋</div>
+                            Recent Cases
+                        </a>
+                    </li>
+                    <li class="taxonomy-item">
+                        <a href="#" class="taxonomy-link" id="conflictResolution">
+                            <div class="taxonomy-icon">⚠️</div>
+                            Resolve Conflicts
+                        </a>
+                    </li>
+                    <li class="taxonomy-item">
+                        <a href="#" class="taxonomy-link" id="auditTrail">
+                            <div class="taxonomy-icon">📊</div>
+                            Audit Trail
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="content-header">
+                <div class="breadcrumb">
+                    <span class="breadcrumb-item">Medical Conditions</span>
+                    <span class="breadcrumb-separator">›</span>
+                    <span class="breadcrumb-item">Cardiovascular</span>
+                </div>
+            </div>
+
+            <div class="diagnostic-grid" id="diagnosticGrid">
+                <!-- Diagnostic cards will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Details Panel -->
+        <div class="details-panel">
+            <div class="panel-header">
+                <div class="panel-title" id="detailTitle">Myocardial Infarction</div>
+                <div class="panel-subtitle" id="detailSubtitle">ICD-10: I21.9</div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-title">Clinical Overview</div>
+                <div class="detail-content" id="clinicalOverview">
+                    Acute myocardial infarction represents necrosis of myocardial tissue due to prolonged ischemia. Typically results from atherosclerotic plaque rupture with subsequent thrombosis, leading to complete occlusion of coronary artery.
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-title">Related Conditions</div>
+                <ul class="related-conditions">
+                    <li class="related-item">
+                        <a href="#" class="related-link">Unstable Angina</a>
+                        <div class="related-similarity">85%</div>
+                    </li>
+                    <li class="related-item">
+                        <a href="#" class="related-link">Cardiac Arrest</a>
+                        <div class="related-similarity">72%</div>
+                    </li>
+                    <li class="related-item">
+                        <a href="#" class="related-link">Heart Failure</a>
+                        <div class="related-similarity">68%</div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="detail-section">
+                <div class="detail-title">Case History</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">Today, 14:32</div>
+                            <div class="timeline-text">Case updated with new diagnostic criteria</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">Yesterday, 09:15</div>
+                            <div class="timeline-text">Treatment cost range revised</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <div class="timeline-date">2 days ago, 16:45</div>
+                            <div class="timeline-text">Initial case documentation</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Action Buttons -->
+    <div class="floating-actions">
+        <button class="fab" id="addCase" title="Add New Case">+</button>
+        <button class="fab" id="exportData" title="Export Data">📄</button>
+    </div>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-item status-active">Database: Connected</div>
+        <div class="status-item">Last Sync: 2 minutes ago</div>
+        <div class="status-item">Active Cases: 247</div>
+        <div class="status-item">Conflicts: 3 pending</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
