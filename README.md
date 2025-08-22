@@ -25,6 +25,7 @@
 
 ## 🔹 Problem
 
+<<<<<<< HEAD
 The **Fibonacci sequence** is a series where each number is the sum of the two preceding ones:
 
 ```
@@ -40,6 +41,11 @@ Sequence example:
 ```
 
 **Goal:** Compute the `n`-th Fibonacci number efficiently and compare two approaches: **recursive vs iterative**.
+=======
+| Web Design Prototype | Final Swing Form in MD System 2.5.1 |
+|----------------------|-------------------------------------|
+| ![Web Preview](assets/form-html-preview.png) | ![Swing Preview](assets/form-swing-preview.png) |
+>>>>>>> parent of 4346133 (Update README.md)
 
 ---
 
