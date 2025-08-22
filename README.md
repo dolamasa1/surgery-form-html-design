@@ -1,55 +1,140 @@
-# 🏥 Medical Surgeries Form — Desktop UI Prototype
+🧮 Fibonacci Showcase: Recursive vs Iterative in Go 🚀
 
-This project showcases a **clean HTML, CSS, and JavaScript prototype** designed specifically to simulate a desktop user interface for managing **medical surgeries forms**.
+Explore two ways to compute Fibonacci numbers in Go, benchmark their performance, and understand why algorithmic insight matters.
 
-The design served as a foundation for building the same form natively with **Java Swing**, using **FlatLaf** and **MigLayout**, and is now **fully integrated within MD System 2.5.1**, our medical desktop management software.
 
----
 
-## 💡 Why This Prototype?
 
-Designing complex forms directly in Java Swing can be tedious. This web-based prototype allowed for:
+📖 Table of Contents
 
-✔️ Rapid visual prototyping  
-✔️ Iterative layout testing  
-✔️ Clear structure aligned with desktop application requirements  
+Problem
 
-Once finalized, the design was converted into a native Swing form with precise attention to detail.
+Implementations
 
----
+Recursive
 
-## 🚀 Integration in MD System 2.5.1
+Iterative
 
-The final Java Swing version of this form is part of **MD System 2.5.1**, a complete medical desktop system for clinics and healthcare providers.
+Benchmark Results
 
-In **MD System**, this form is used for recording and managing patient surgeries with:
+Insights
 
-✔️ Desktop-optimized layout  
-✔️ Fast, responsive interaction  
-✔️ Fully integrated with the system's database and workflows  
+Usage
 
-> **Note:** The Java Swing source code is not provided in this repository. This project only includes the HTML prototype used during the design phase.
+License
 
----
+🔹 Problem
 
-## 📸 Screenshots
+The Fibonacci sequence is a series where each number is the sum of the two preceding ones:
 
-**Web Design Prototype:**  
-![Web Preview](assets/form-html-preview.png)  
+F(0) = 0
+F(1) = 1
+F(n) = F(n-1) + F(n-2), n > 1
 
-**Final Swing Form in MD System 2.5.1:**  
-![Swing Preview](assets/form-swing-preview.png)  
+Sequence example:
 
----
+0, 1, 1, 2, 3, 5, 8, 13, ...
 
-## 💻 Technologies Used
+Goal: Compute the n-th Fibonacci number efficiently and compare two approaches: recursive vs iterative.
 
-- **HTML5**  
-- **CSS3**  
-- **Vanilla JavaScript**  
-- **Final form in MD System:** Java Swing, FlatLaf, MigLayout  
+💻 Implementations
+Recursive Fibonacci 🔁
 
----
+Elegant and follows the mathematical definition:
 
-## 📂 Project Structure
+func FibonacciRecursive(n int) int {
+    if n == 0 { return 0 }
+    if n == 1 { return 1 }
+    return FibonacciRecursive(n-1) + FibonacciRecursive(n-2)
+}
+
+Pros: Simple, intuitive.
+
+Cons: Exponentially slow for large n, repeats calculations many times.
+
+Iterative Fibonacci 🔄
+
+Efficient, uses a loop:
+
+func FibonacciIterative(n int) int {
+    if n == 0 { return 0 }
+    if n == 1 { return 1 }
+
+
+    a, b := 0, 1
+    for i := 2; i <= n; i++ {
+        a, b = b, a+b
+    }
+    return b
+}
+
+Pros: Linear time O(n), constant space O(1), extremely fast.
+
+Demonstrates how understanding patterns allows optimized computation.
+
+⏱ Benchmark Results
+Recursive Fibonacci
+n	Result	Time (s)
+41	165580141	0.893
+42	267914296	1.436
+43	433494437	2.378
+44	701408733	3.790
+45	1134903170	6.214
+46	1836311903	10.057
+Iterative Fibonacci (avg per call)
+n	Result	Avg Time per call (ns)
+46	1836311903	20
+460	-3461060371988318125	177
+4600	230206383445398507	1779
+46000	978664232609031707	19111
+Additional averaged benchmarks (larger scale)
+x	y1	y2
+8.10	3.37637	1.2153
+8.20	3.57458	1.2756
+8.30	3.73535	1.3175
+8.40	4.05641	1.4019
+8.50	4.14432	1.4224
+8.60	4.03505	1.3969
+8.90	4.33160	1.4668
+
+These represent averages over ~90 runs, scaled for presentation.
+
+📊 Graph Visualization
+
+File: graph.png
+
+Shows exponential growth of recursive calls vs linear growth of iterative method.
+
+
+
+
+💡 Insights
+
+Recursive version: beautiful, intuitive, but slow for large numbers.
+
+Iterative version: fast, efficient, reuses intermediate results.
+
+Measuring execution time + visualizing growth helps understand algorithmic complexity.
+
+Optimization comes from recognizing patterns and leveraging previous results — a core skill for developers and problem-solvers.
+
+This project shows how deeper understanding converts a naive solution into a high-performance one.
+
+🚀 Usage
+
+Clone the repo:
+
+git clone https://github.com/<your-username>/FibonacciShowcase.git
+cd FibonacciShowcase
+
+Run Recursive:
+
+go run fib_recursive.go
+
+Run Iterative:
+
+go run fib_iterative.go
+📝 License
+
+MIT License ©
 
