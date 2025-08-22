@@ -1,4 +1,4 @@
-🧮 Fibonacci Showcase: Recursive vs Iterative in Go 🚀
+Fibonacci Showcase: Recursive vs Iterative in Go 🚀
 
 Explore two ways to compute Fibonacci numbers in Go, benchmark their performance, and understand why algorithmic insight matters.
 
